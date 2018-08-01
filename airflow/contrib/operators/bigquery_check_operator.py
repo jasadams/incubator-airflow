@@ -55,6 +55,8 @@ class BigQueryCheckOperator(CheckOperator):
     :type sql: string
     :param bigquery_conn_id: reference to the BigQuery database
     :type bigquery_conn_id: string
+    :param use_legacy_sql: Whether to use legacy SQL (true) or standard SQL (false).
+    :type use_legacy_sql: boolean
     """
 
     @apply_defaults
@@ -62,14 +64,16 @@ class BigQueryCheckOperator(CheckOperator):
             self,
             sql,
             bigquery_conn_id='bigquery_default',
+            use_legacy_sql=True,
             *args,
             **kwargs):
         super(BigQueryCheckOperator, self).__init__(sql=sql, *args, **kwargs)
         self.bigquery_conn_id = bigquery_conn_id
         self.sql = sql
+        self.use_legacy_sql = use_legacy_sql
 
     def get_db_hook(self):
-        return BigQueryHook(bigquery_conn_id=self.bigquery_conn_id)
+        return BigQueryHook(bigquery_conn_id=self.bigquery_conn_id, use_legacy_sql=self.use_legacy_sql)
 
 
 class BigQueryValueCheckOperator(ValueCheckOperator):
@@ -78,20 +82,23 @@ class BigQueryValueCheckOperator(ValueCheckOperator):
 
     :param sql: the sql to be executed
     :type sql: string
+    :param use_legacy_sql: Whether to use legacy SQL (true) or standard SQL (false).
+    :type use_legacy_sql: boolean
     """
 
     @apply_defaults
     def __init__(
             self, sql, pass_value, tolerance=None,
             bigquery_conn_id='bigquery_default',
+            use_legacy_sql=True,
             *args, **kwargs):
         super(BigQueryValueCheckOperator, self).__init__(
-            sql=sql, pass_value=pass_value, tolerance=tolerance,
+            sql=sql, pass_value=pass_value, tolerance=tolerance, use_legacy_sql=use_legacy_sql,
             *args, **kwargs)
         self.bigquery_conn_id = bigquery_conn_id
 
     def get_db_hook(self):
-        return BigQueryHook(bigquery_conn_id=self.bigquery_conn_id)
+        return BigQueryHook(bigquery_conn_id=self.bigquery_conn_id, use_legacy_sql=self.use_legacy_sql)
 
 
 class BigQueryIntervalCheckOperator(IntervalCheckOperator):
