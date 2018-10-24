@@ -49,6 +49,7 @@ class MySqlHook(DbApiHook):
     def get_autocommit(self, conn):
         """
         MySql connection gets autocommit in a different way.
+
         :param conn: connection to get autocommit setting from.
         :type conn: connection object.
         :return: connection autocommit setting
@@ -121,7 +122,7 @@ class MySqlHook(DbApiHook):
     def _serialize_cell(cell, conn):
         """
         MySQLdb converts an argument to a literal
-        when passing those seperately to execute. Hence, this method does nothing.
+        when passing those separately to execute. Hence, this method does nothing.
 
         :param cell: The cell to insert into the table
         :type cell: object
